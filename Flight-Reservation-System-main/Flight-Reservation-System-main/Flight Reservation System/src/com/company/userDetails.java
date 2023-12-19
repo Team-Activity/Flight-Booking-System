@@ -39,7 +39,7 @@ public class userDetails extends JFrame {
 
         airLineLabel = new JLabel("Choose Airline:");
         add(airLineLabel);
-        String[] airLines = {"Air Peace(APK)", "Allied Air(AJK)", "Dana Air(DAN)", "Max Air(NGL)", "Ibom Air(IAN)", "Arik Air(ARA)", "Azman Air(AZM)", "Kabo Air(QNK)", "Aero Contractors(ACN)"};
+        String[] airLines = {"Philippine Airline(Pal)", "Cebu Pacific(Cebu Pac)", "Air Asia"};
         airLineTypeJC = new JComboBox(airLines);
         add(airLineTypeJC);
 
