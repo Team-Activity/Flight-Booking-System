@@ -65,13 +65,13 @@ public class userDetails extends JFrame {
 
         currentLabel = new JLabel("From:");
         add(currentLabel);
-        String[] currentCities = {"Abuja(ABV)", "Lagos(LOS)", "Enugu(ENU)", "Port Harcourt(PHC)", "Calabar(CBQ)", "Kaduna(KAD)", "Sokoto(SKO)", "Johannesburg(JNB)", "Owerri(QOW)", "Banjul(BJL)", "Accra(ACC)", "Kano(KAN)", "Delhi(DEL)", "Uyo(QUO)", "FreeTown(FNA)", "Dubai(Sharjah(SHJ))", "Benin City(BNI)"};
+        String[] currentCities = {"Cebu(CEB)", "Manila(MNL)", "Bohol-Panglao(TAG)", "Baguio(BAG)", "El Nido(ENI)", "Clark(CRK)", "Iloilo(ILO)", "Palawan(SWL)", "Batanes(BSO)", "Ormoc(OMC)", "Tacloban(TAC)", "Siargao(IAO)", "Surigao(SUG)", "Cotabato(CBO)", "Ozamis(OZC)", "Camiguin(CGM)", "Dumaguete(DGT)"};
         currentCityJC = new JComboBox(currentCities);
         add(currentCityJC);
 
         destinationLabel = new JLabel("To:");
         add(destinationLabel);
-        String[] destinationCities = {"Abuja(ABV)", "Lagos(LOS)", "Owerri(QOW)", "Enugu(ENU)", "Sokoto(SKO)","Kaduna(KAD)","Port Harcourt(PHC)", "Calabar(CBQ)","Dubai(Sharjah(SHJ))", "Uyo(QUO)", "Banjul(BJL)", "Benin City(BNI)", "Delhi(DEL)", "FreeTown(FNA)", "Johannesburg(JNB)", "Accra(ACC)"};
+        String[] destinationCities = {"Cebu(CEB)", "Manila(MNL)", "Bohol-Panglao(TAG)", "Baguio(BAG)", "El Nido(ENI)", "Clark(CRK)", "Iloilo(ILO)", "Palawan(SWL)", "Batanes(BSO)", "Ormoc(OMC)", "Tacloban(TAC)", "Siargao(IAO)", "Surigao(SUG)", "Cotabato(CBO)", "Ozamis(OZC)", "Camiguin(CGM)", "Dumaguete(DGT)"};
         destinationCityJC = new JComboBox(destinationCities);
         add(destinationCityJC);
 
