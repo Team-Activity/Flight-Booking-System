@@ -43,12 +43,12 @@ public class userDetails extends JFrame {
         airLineTypeJC = new JComboBox(airLines);
         add(airLineTypeJC);
 
-        fullName = new JLabel("Enter Full name:");
+        fullName = new JLabel("Full name:");
         add(fullName);
         fullNameTF = new JTextField();
         add(fullNameTF);
 
-        addressLabel = new JLabel("Enter Home Address:");
+        addressLabel = new JLabel("Home Address:");
         add(addressLabel);
         addressTF = new JTextField();
         add(addressTF);
@@ -58,7 +58,7 @@ public class userDetails extends JFrame {
         seatTF = new JTextField();
         add(seatTF);
 
-        contactLabel = new JLabel("Enter Phone Number:");
+        contactLabel = new JLabel("Phone Number:");
         add(contactLabel);
         contactTF = new JTextField();
         add(contactTF);
@@ -75,19 +75,19 @@ public class userDetails extends JFrame {
         destinationCityJC = new JComboBox(destinationCities);
         add(destinationCityJC);
 
-        classTypeLabel = new JLabel("Choose Class Type:");
+        classTypeLabel = new JLabel("Class Type:");
         add(classTypeLabel);
         String[] classes = {"Economy", "Business", "First"};
         classTypeJC = new JComboBox(classes);
         add(classTypeJC);
 
-        flightTypeLabel = new JLabel("Choose Flight Type:");
+        flightTypeLabel = new JLabel("Flight Type:");
         add(flightTypeLabel);
         String[] flightTypes = {"Return", "One way"};
         flightTypeJC = new JComboBox(flightTypes);
         add(flightTypeJC);
 
-        travelDate = new JLabel("Enter Travel Date ");
+        travelDate = new JLabel("Travel Date ");
         add(travelDate);
         UtilDateModel model = new UtilDateModel();
         Properties p = new Properties();
@@ -98,7 +98,7 @@ public class userDetails extends JFrame {
         travelDatePicker = new JDatePickerImpl(travelDatePanel, new DateLabelFormatter());
         add(travelDatePicker);
 
-        returnDate = new JLabel("Enter Return Date (skip if one way) ");
+        returnDate = new JLabel("Return Date (skip if one way) ");
         add(returnDate);
         UtilDateModel model1 = new UtilDateModel();
         Properties p1 = new Properties();
@@ -110,7 +110,7 @@ public class userDetails extends JFrame {
         add(returnDatePicker);
 
 
-        paymentLabel = new JLabel("Choose Payment Type:");
+        paymentLabel = new JLabel("Payment Type:");
         add(paymentLabel);
         String[] paymentType = {"Cash", "Credit Card"};
         paymentJC = new JComboBox(paymentType);
