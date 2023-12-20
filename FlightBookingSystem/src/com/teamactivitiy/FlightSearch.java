@@ -23,9 +23,10 @@ public class FlightSearch extends JFrame {
         departureCityField = new JTextField();
         destinationField = new JTextField();
         priceRangeField = new JTextField();
-        
-        airlinesComboBox = new JComboBox<>(); // Populate with airline names
-        layoverComboBox = new JComboBox<>(new String[]{"Any", "Non-stop", "1 Stop", "2+ Stops"});
+
+        // Add the specified airlines to the combo box
+        airlinesComboBox = new JComboBox<>(new String[]{"Philippine (PAL)", "Air Asia", "Cebu Pacific"});
+        layoverComboBox = new JComboBox<>(new String[]{"Any", "Direct", "1 Stop", "2+ Stops"});
 
         departureDateSpinner = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(departureDateSpinner, "dd/MM/yyyy");

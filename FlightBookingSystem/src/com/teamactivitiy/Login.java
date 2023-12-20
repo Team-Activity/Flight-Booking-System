@@ -2,6 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Login {
 
@@ -30,7 +34,7 @@ public class Login {
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
 
-                // Validate credentials (replace with actual database validation)
+                // Validate credentials with database
                 if (validateCredentials(username, password)) {
                     loginDialog.dispose();
                     FlightBookingApp.userLoggedIn();
@@ -45,7 +49,21 @@ public class Login {
     }
 
     private static boolean validateCredentials(String username, String password) {
-        // Replace this logic with actual database validation
-        return username.equals("admin") && password.equals("password");
+        // Database validation logic
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                // Check if a record was found
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 }
