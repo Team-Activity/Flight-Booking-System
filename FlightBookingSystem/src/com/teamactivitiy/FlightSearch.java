@@ -2,15 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FlightSearch extends JFrame {
-    private JTextField departureCityField, destinationField, priceRangeField;
-    private JComboBox<String> airlinesComboBox, layoverComboBox;
+    private JComboBox<String> departureCityComboBox, destinationComboBox, airlinesComboBox, layoverComboBox;
+    private JTextField priceRangeField;
     private JSpinner departureDateSpinner;
     private JButton searchButton;
 
@@ -20,13 +17,28 @@ public class FlightSearch extends JFrame {
         setSize(400, 300);
         setLayout(new GridLayout(0, 2));
 
-        departureCityField = new JTextField();
-        destinationField = new JTextField();
-        priceRangeField = new JTextField();
+        String[] cities = {"Cebu", "Manila", "Bohol", "Tacloban", "Baguio", "Siargao", "Cameguin", "Ormoc", "Davao", "Zamboanga", "Surigao"};
+        departureCityComboBox = new JComboBox<>(cities);
+        destinationComboBox = new JComboBox<>(cities);
 
-        // Add the specified airlines to the combo box
-        airlinesComboBox = new JComboBox<>(new String[]{"Philippine (PAL)", "Air Asia", "Cebu Pacific"});
-        layoverComboBox = new JComboBox<>(new String[]{"Any", "Direct", "1 Stop", "2+ Stops"});
+        priceRangeField = new JTextField();
+        priceRangeField.setEditable(false);
+
+        airlinesComboBox = new JComboBox<>(new String[]{"Cebu Pacific", "Air Asia", "Philippine (PAL)"});
+        airlinesComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePrice();
+            }
+        });
+
+        layoverComboBox = new JComboBox<>(new String[]{"Choose", "Direct", "1 Stop"});
+        layoverComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePrice();
+            }
+        });
 
         departureDateSpinner = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(departureDateSpinner, "dd/MM/yyyy");
@@ -38,13 +50,14 @@ public class FlightSearch extends JFrame {
         addComponentsToPanel();
 
         setVisible(true);
+        setLocationRelativeTo(null); // Center the window
     }
 
     private void addComponentsToPanel() {
         add(new JLabel("Departure City:"));
-        add(departureCityField);
+        add(departureCityComboBox);
         add(new JLabel("Destination:"));
-        add(destinationField);
+        add(destinationComboBox);
         add(new JLabel("Departure Date:"));
         add(departureDateSpinner);
         add(new JLabel("Airlines:"));
@@ -56,28 +69,34 @@ public class FlightSearch extends JFrame {
         add(searchButton);
     }
 
+    private void updatePrice() {
+        String selectedAirline = (String) airlinesComboBox.getSelectedItem();
+        String selectedLayover = (String) layoverComboBox.getSelectedItem();
+        int price = calculatePrice(selectedAirline, selectedLayover);
+        priceRangeField.setText(price + " PHP");
+    }
+
+    private int calculatePrice(String airline, String layover) {
+        int price = 0;
+        if ("Cebu Pacific".equals(airline)) {
+            price = 1200;
+        } else if ("Air Asia".equals(airline)) {
+            price = 1300;
+        } else if ("Philippine (PAL)".equals(airline)) {
+            price = 3000;
+        }
+
+        if ("1 Stop".equals(layover)) {
+            price *= 2;
+        }
+        return price;
+    }
+
     private class SearchActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Here you can implement the logic to fetch data from the database based on the user inputs
-            String departureCity = departureCityField.getText();
-            String destination = destinationField.getText();
-            String priceRange = priceRangeField.getText();
-            String selectedAirline = (String) airlinesComboBox.getSelectedItem();
             String selectedLayover = (String) layoverComboBox.getSelectedItem();
-            Date departureDate = (Date) departureDateSpinner.getValue();
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            String formattedDate = sdf.format(departureDate);
-
-            // Display a message or update the search results display
-            JOptionPane.showMessageDialog(FlightSearch.this, "Search clicked!\n" +
-                    "Departure City: " + departureCity + "\n" +
-                    "Destination: " + destination + "\n" +
-                    "Departure Date: " + formattedDate + "\n" +
-                    "Airline: " + selectedAirline + "\n" +
-                    "Layovers: " + selectedLayover + "\n" +
-                    "Price Range: " + priceRange);
+            new FlightDetails(selectedLayover);
         }
     }
 
