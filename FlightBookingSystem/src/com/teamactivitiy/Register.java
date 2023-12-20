@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -11,8 +10,10 @@ public class Register extends JFrame {
     private JTextField usernameField, firstNameField, lastNameField, addressField, phoneNumberField;
     private JPasswordField passwordField;
     private JButton registerButton;
+    private JFrame parentFrame;
 
-    public Register() {
+    public Register(JFrame parentFrame) {
+        this.parentFrame = parentFrame;
         createWindow();
         initializeComponents();
         addActionEvents();
@@ -22,7 +23,7 @@ public class Register extends JFrame {
         setTitle("User Registration");
         setSize(350, 400); // Adjusted window size
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
     }
 
@@ -72,15 +73,6 @@ public class Register extends JFrame {
     
         add(panel);
     }
-    
-
-    private JPanel createLabeledField(String label, JTextField field) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        panel.add(new JLabel(label));
-        panel.add(field);
-        return panel;
-    }
 
     private void addActionEvents() {
         registerButton.addActionListener(new ActionListener() {
@@ -93,28 +85,19 @@ public class Register extends JFrame {
                 String address = addressField.getText();
                 String phoneNumber = phoneNumberField.getText();
 
-                insertNewUser(username, password, firstName, lastName, address, phoneNumber);
+                if (insertNewUser(username, password, firstName, lastName, address, phoneNumber)) {
+                    // Close this window and log the user in
+                    setVisible(false);
+                    FlightBookingApp.userLoggedIn();
+                }
             }
         });
-
     }
 
-    private Connection connect() {
-        // Replace with your database connection details
-        String url = "jdbc:sqlite:path_to_your_database.db";
-        Connection conn = null;
-        try {
-            conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return conn;
-    }
-
-    private void insertNewUser(String username, String password, String firstName, String lastName, String address, String phoneNumber) {
+    private boolean insertNewUser(String username, String password, String firstName, String lastName, String address, String phoneNumber) {
         String sql = "INSERT INTO users(username, password, firstname, lastname, address, phonenumber) VALUES(?,?,?,?,?,?)";
 
-        try (Connection conn = this.connect();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -124,18 +107,14 @@ public class Register extends JFrame {
             pstmt.setString(6, phoneNumber);
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "User registered successfully");
+            return true;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            return false;
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Register().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new Register(null).setVisible(true));
     }
 }
