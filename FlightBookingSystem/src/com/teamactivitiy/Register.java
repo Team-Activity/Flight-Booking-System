@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Register extends JFrame {
-    private JTextField usernameField, firstNameField, lastNameField, addressField, phoneNumberField;
+    private JTextField emailField, usernameField, firstNameField, lastNameField, addressField, phoneNumberField;
     private JPasswordField passwordField;
     private JButton registerButton;
     private JFrame parentFrame;
@@ -34,7 +34,12 @@ public class Register extends JFrame {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(2, 2, 2, 2); // Adding some padding
-    
+
+        // Email Field
+        emailField = new JTextField(15);
+        panel.add(new JLabel("Email:"), gbc);
+        panel.add(emailField, gbc);
+        
         // Username Field
         usernameField = new JTextField(15);
         panel.add(new JLabel("Username:"), gbc);
@@ -78,6 +83,7 @@ public class Register extends JFrame {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String email = emailField.getText();
                 String username = usernameField.getText();
                 String password = new String(passwordField.getPassword());
                 String firstName = firstNameField.getText();
@@ -85,7 +91,7 @@ public class Register extends JFrame {
                 String address = addressField.getText();
                 String phoneNumber = phoneNumberField.getText();
 
-                if (insertNewUser(username, password, firstName, lastName, address, phoneNumber)) {
+                if (insertNewUser(email, username, password, firstName, lastName, address, phoneNumber)) {
                     // Close this window and log the user in
                     setVisible(false);
                     FlightBookingApp.userLoggedIn();
@@ -94,17 +100,18 @@ public class Register extends JFrame {
         });
     }
 
-    private boolean insertNewUser(String username, String password, String firstname, String lastname, String address, String phonenumber) {
-        String sql = "INSERT INTO users(username, password, firstname, lastname, address, phonenumber) VALUES(?,?,?,?,?,?)";
+    private boolean insertNewUser(String email, String username, String password, String firstname, String lastname, String address, String phonenumber) {
+        String sql = "INSERT INTO users(email, username, password, firstname, lastname, address, phonenumber) VALUES(?,?,?,?,?,?,?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            pstmt.setString(3, firstname);
-            pstmt.setString(4, lastname);
-            pstmt.setString(5, address);
-            pstmt.setString(6, phonenumber);
+            pstmt.setString(1, email);
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.setString(4, firstname);
+            pstmt.setString(5, lastname);
+            pstmt.setString(6, address);
+            pstmt.setString(7, phonenumber);
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "User registered successfully");
             return true;
