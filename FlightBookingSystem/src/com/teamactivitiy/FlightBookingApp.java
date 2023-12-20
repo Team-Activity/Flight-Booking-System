@@ -31,6 +31,7 @@ public class FlightBookingApp {
         JButton searchButton = new JButton("Search for flights");
         searchButton.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         searchButton.setBounds(250, 150, 300, 50);
+        searchButton.addActionListener(e -> openFlightSearchWindow());
         panel.add(searchButton);
 
         JButton manageButton = new JButton("Manage Bookings");
@@ -87,5 +88,10 @@ public class FlightBookingApp {
         isUserSignedIn = false;
         updateAccountPopup();
         JOptionPane.showMessageDialog(frame, "Logged out successfully.");
+    }
+
+    private static void openFlightSearchWindow() {
+        FlightSearch flightSearchWindow = new FlightSearch(); // Assuming FlightSearch is your class
+        flightSearchWindow.setVisible(true);
     }
 }
