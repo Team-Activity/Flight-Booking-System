@@ -94,17 +94,17 @@ public class Register extends JFrame {
         });
     }
 
-    private boolean insertNewUser(String username, String password, String firstName, String lastName, String address, String phoneNumber) {
+    private boolean insertNewUser(String username, String password, String firstname, String lastname, String address, String phonenumber) {
         String sql = "INSERT INTO users(username, password, firstname, lastname, address, phonenumber) VALUES(?,?,?,?,?,?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
-            pstmt.setString(3, firstName);
-            pstmt.setString(4, lastName);
+            pstmt.setString(3, firstname);
+            pstmt.setString(4, lastname);
             pstmt.setString(5, address);
-            pstmt.setString(6, phoneNumber);
+            pstmt.setString(6, phonenumber);
             pstmt.executeUpdate();
             JOptionPane.showMessageDialog(this, "User registered successfully");
             return true;
