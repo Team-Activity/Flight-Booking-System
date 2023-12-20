@@ -15,7 +15,6 @@ public class PaymentDetailsForm extends JDialog {
         this.mainAppFrame = parent; // Store the reference to the main application frame
         this.selectedSeats = selectedSeats;
 
-        // Layout setup
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setSize(400, 200);
 
@@ -43,8 +42,8 @@ public class PaymentDetailsForm extends JDialog {
         // Book button
         JPanel bookButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton bookButton = new JButton("Book");
-        bookButton.setFont(new Font("Arial", Font.BOLD, 16)); // Set a larger font
-        bookButton.setPreferredSize(new Dimension(150, 50)); // Set the preferred size to make the button larger
+        bookButton.setFont(new Font("Arial", Font.BOLD, 16));
+        bookButton.setPreferredSize(new Dimension(150, 50));
         bookButton.addActionListener(this::processPayment);
         bookButtonPanel.add(bookButton);
         getContentPane().add(bookButtonPanel);
@@ -53,21 +52,17 @@ public class PaymentDetailsForm extends JDialog {
     }
 
     private void processPayment(ActionEvent e) {
-        // Here you would handle the payment processing
-        // For now, just display a confirmation message
-        JOptionPane.showMessageDialog(this, "Payment successful!\nSeats: " + selectedSeats, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
-        closeAllWindowsExceptMain();
-    }
+        // Placeholder for actual payment processing logic
+        String cardNumber = cardNumberField.getText();
+        String expiryDate = expiryDateField.getText();
+        String cvv = cvvField.getText();
 
-    private void closeAllWindowsExceptMain() {
-        Window[] windows = Window.getWindows();
-        for (Window window : windows) {
-            if (window != mainAppFrame && window instanceof JDialog) {
-                window.dispose(); // Close the dialog
-            }
-        }
-        // Bring the main application frame to the front if needed
-        mainAppFrame.setState(JFrame.NORMAL);
-        mainAppFrame.toFront();
+        // You would typically validate the input here
+        // For now, let's assume the payment was successful
+        JOptionPane.showMessageDialog(this, "Payment successful!\nSeats: " + selectedSeats, "Booking Confirmed", JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+
+        // Call FinalizeBooking here with the card number and selected seats
+        new FinalizeBooking(mainAppFrame, cardNumber, selectedSeats);
     }
 }
