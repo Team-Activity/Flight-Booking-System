@@ -23,15 +23,9 @@ public class SeatSelectionForm extends JDialog {
     }
 
     private void loadSeatIcon() {
-        try {
-            ImageIcon originalIcon = new ImageIcon("C:\\Users\\Dador\\Documents\\GitHub\\Flight-Booking-System\\FlightBookingSystem\\src\\com\\teamactivitiy\\seat.png");
-            Image originalImage = originalIcon.getImage();
-            Image scaledImage = originalImage.getScaledInstance(30, 30, Image.SCALE_SMOOTH); // Scale it to 30x30
-            seatIcon = new ImageIcon(scaledImage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to load seat icon.", "Error", JOptionPane.ERROR_MESSAGE);
-            seatIcon = null;
+        seatIcon = new ImageIcon(getClass().getResource("seat.png"));
+        if (seatIcon.getIconWidth() == -1) {
+            JOptionPane.showMessageDialog(this, "Seat icon could not be loaded.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
