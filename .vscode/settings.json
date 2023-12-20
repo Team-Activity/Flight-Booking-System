@@ -1,7 +1,0 @@
-{
-    "sqltools.connections": [],
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "FlightBookingSystem/lib/sqlite-jdbc-3.7.2.jar"
-    ]
-}
