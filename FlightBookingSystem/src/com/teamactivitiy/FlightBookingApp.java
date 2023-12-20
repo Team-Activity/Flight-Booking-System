@@ -37,6 +37,7 @@ public class FlightBookingApp {
         JButton manageButton = new JButton("Manage Bookings");
         manageButton.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         manageButton.setBounds(250, 220, 300, 50);
+        manageButton.addActionListener(e -> openManageBookingsWindow());
         panel.add(manageButton);
 
         JButton accountButton = new JButton("My Account");
@@ -91,7 +92,14 @@ public class FlightBookingApp {
     }
 
     private static void openFlightSearchWindow() {
-        FlightSearch flightSearchWindow = new FlightSearch(); // Assuming FlightSearch is your class
+        FlightSearch flightSearchWindow = new FlightSearch(); 
         flightSearchWindow.setVisible(true);
     }
+
+    private static void openManageBookingsWindow() {
+        ManageBookings manageBookingsWindow = new ManageBookings();
+        manageBookingsWindow.setLocationRelativeTo(frame); // Open relative to the main application window
+        manageBookingsWindow.setVisible(true);
+    }
+    
 }
