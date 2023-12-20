@@ -9,7 +9,7 @@ public class Login {
         // Create a JDialog for login
         JDialog loginDialog = new JDialog(parentFrame, "Login", true);
         loginDialog.setLayout(new FlowLayout());
-        loginDialog.setSize(300, 150);
+        loginDialog.setSize(300, 200);
 
         // Create UI components for login
         JTextField usernameField = new JTextField(20);

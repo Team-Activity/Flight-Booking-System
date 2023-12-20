@@ -7,6 +7,7 @@ public class FlightBookingApp {
 
     private static boolean isUserSignedIn = false;
     private static JFrame frame;
+    private static JPopupMenu accountPopup;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> createAndShowGUI());
@@ -42,25 +43,14 @@ public class FlightBookingApp {
         accountButton.setBounds(620, 30, 150, 50);
         panel.add(accountButton);
 
-        JPopupMenu accountPopup = new JPopupMenu();
-        JMenuItem loginItem = new JMenuItem("Login");
-        loginItem.addActionListener(e -> {
-            Login.showLoginDialog(frame);
-        });
-        JMenuItem registerItem = new JMenuItem("Register");
-        registerItem.addActionListener(e -> {
-            // Registration logic here
-            JOptionPane.showMessageDialog(frame, "Registration functionality not implemented yet.");
-        });
-        accountPopup.add(loginItem);
-        accountPopup.add(registerItem);
+        accountPopup = new JPopupMenu();
+        updateAccountPopup();
 
         accountButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                if (!isUserSignedIn) {
-                    accountPopup.show(accountButton, 0, accountButton.getHeight());
-                }
+                updateAccountPopup();
+                accountPopup.show(accountButton, 0, accountButton.getHeight());
             }
         });
 
@@ -68,8 +58,34 @@ public class FlightBookingApp {
         frame.setVisible(true);
     }
 
+    private static void updateAccountPopup() {
+        accountPopup.removeAll();
+
+        if (isUserSignedIn) {
+            JMenuItem logoutItem = new JMenuItem("Logout");
+            logoutItem.addActionListener(e -> userLoggedOut());
+            accountPopup.add(logoutItem);
+        } else {
+            JMenuItem loginItem = new JMenuItem("Login");
+            loginItem.addActionListener(e -> Login.showLoginDialog(frame));
+            JMenuItem registerItem = new JMenuItem("Register");
+            registerItem.addActionListener(e -> {
+                new Register(frame).setVisible(true);
+            });
+            accountPopup.add(loginItem);
+            accountPopup.add(registerItem);
+        }
+    }
+
     public static void userLoggedIn() {
         isUserSignedIn = true;
+        updateAccountPopup();
         JOptionPane.showMessageDialog(frame, "Login Successful!");
+    }
+
+    private static void userLoggedOut() {
+        isUserSignedIn = false;
+        updateAccountPopup();
+        JOptionPane.showMessageDialog(frame, "Logged out successfully.");
     }
 }
