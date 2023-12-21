@@ -83,6 +83,7 @@ public class FlightBookingApp {
         isUserSignedIn = true;
         updateAccountPopup();
         JOptionPane.showMessageDialog(frame, "Login Successful!");
+        showNotification(); // Show notification on login
     }
 
     private static void userLoggedOut() {
@@ -102,4 +103,7 @@ public class FlightBookingApp {
         manageBookingsWindow.setVisible(true);
     }
     
+    private static void showNotification() {
+        new Notification().showNotification();
+    }
 }
