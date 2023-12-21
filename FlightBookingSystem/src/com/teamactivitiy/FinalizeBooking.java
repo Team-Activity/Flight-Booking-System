@@ -28,21 +28,14 @@ public class FinalizeBooking extends JDialog {
     }
 
     private void addBookingToDatabase() {
-        String sql = "INSERT INTO bookings (card_number, seat_numbers) VALUES (?, ?)";
-        String seatNumbers = String.join(", ", selectedSeats);
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, cardNumber);
-            pstmt.setString(2, seatNumbers);
-            pstmt.executeUpdate();
-
+        try {
+            DBConnection.updateBooking(cardNumber, selectedSeats);
             JOptionPane.showMessageDialog(this, "Booking successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Failed to finalize booking.", "Database Error", JOptionPane.ERROR_MESSAGE);
         }
-
+    
         dispose();
     }
 }

@@ -38,18 +38,23 @@ public class DBConnection {
         }
     }
 
-    public static void addBooking(String cardNumber, Set<String> selectedSeats) {
-        String sql = "INSERT INTO bookings(card_number, seat_numbers) VALUES(?, ?)";
-
-        try (Connection conn = getConnection(); 
+    public static void updateBooking(String cardNumber, Set<String> selectedSeats) throws SQLException {
+        String sql = "UPDATE bookings SET card_number = ?, seat_numbers = ? WHERE booking_id = (SELECT booking_id FROM bookings WHERE card_number IS NULL AND seat_numbers IS NULL LIMIT 1)";
+    
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, cardNumber);
             String seatNumbers = String.join(", ", selectedSeats);
             pstmt.setString(2, seatNumbers);
-            pstmt.executeUpdate();
+            int updatedRows = pstmt.executeUpdate();
+    
+            if (updatedRows == 0) {
+                System.err.println("No unassigned booking found to update.");
+            }
         } catch (SQLException e) {
-            System.err.println("SQL error occurred while inserting booking data.");
+            System.err.println("SQL error occurred while updating booking data.");
             e.printStackTrace();
         }
     }
+    
 }
