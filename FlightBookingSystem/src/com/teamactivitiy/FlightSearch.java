@@ -13,7 +13,6 @@ public class FlightSearch extends JFrame {
 
     public FlightSearch() {
         setTitle("Flight Search");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 300);
         setLayout(new GridLayout(0, 2));
 
@@ -56,7 +55,7 @@ public class FlightSearch extends JFrame {
         add(departureCityComboBox);
         add(new JLabel("Destination:"));
         add(destinationComboBox);
-        add(new JLabel("Departure Date:"));
+        add(new JLabel("Departure Date (mm/dd/yyyy):"));
         add(departureDateField);
         add(new JLabel("Airlines:"));
         add(airlinesComboBox);
