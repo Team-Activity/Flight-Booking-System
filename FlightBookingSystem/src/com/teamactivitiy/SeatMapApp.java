@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class SeatMapApp extends JFrame {
 
     private JLabel selectedSeatLabel;
+    private JButton currentlySelectedSeat = null; // Variable to track the currently selected seat
 
     public SeatMapApp() {
         setTitle("Seat Map");
@@ -48,7 +49,18 @@ public class SeatMapApp extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JButton clickedSeat = (JButton) e.getSource();
             String seatNumber = clickedSeat.getText();
+
+            if (currentlySelectedSeat != null) {
+                // Deselect the previously selected seat
+                currentlySelectedSeat.setBackground(null);
+            }
+
+            // Select new seat and update label
+            clickedSeat.setBackground(Color.GREEN); // Set a color to indicate selection
             selectedSeatLabel.setText("Selected Seat: " + seatNumber);
+
+            // Update currently selected seat
+            currentlySelectedSeat = clickedSeat;
         }
     }
 
