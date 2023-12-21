@@ -2,14 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FlightSearch extends JFrame {
     private JComboBox<String> departureCityComboBox, destinationComboBox, airlinesComboBox, layoverComboBox;
     private JTextField priceRangeField;
     private JSpinner departureDateSpinner;
     private JButton searchButton;
+    private int userId;
+    private String passengerDetails;
 
     public FlightSearch() {
         setTitle("Flight Search");
@@ -95,12 +100,25 @@ public class FlightSearch extends JFrame {
     private class SearchActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            // Collect booking details
+            String departureCity = (String) departureCityComboBox.getSelectedItem();
+            String destination = (String) destinationComboBox.getSelectedItem();
+            String airlines = (String) airlinesComboBox.getSelectedItem();
+            String layoverType = (String) layoverComboBox.getSelectedItem();
+            Date departureDate = (Date) departureDateSpinner.getValue();
+            int price = calculatePrice(airlines, layoverType);
+
+            try {
+                DBConnection.addFlightDetails(userId, departureCity, destination, departureDate, airlines, layoverType, price);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+
             String selectedLayover = (String) layoverComboBox.getSelectedItem();
             new FlightDetails(selectedLayover);
-        }
-    }
-
+}
+}
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new FlightSearch());
     }
-}
+} 
