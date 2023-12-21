@@ -3,18 +3,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
 
 public class FlightSearch extends JFrame {
     private JComboBox<String> departureCityComboBox, destinationComboBox, airlinesComboBox, layoverComboBox;
-    private JTextField priceRangeField;
-    private JSpinner departureDateSpinner;
+    private JTextField priceRangeField, departureDateField;
     private JButton searchButton;
     private int userId;
-    private String passengerDetails;
 
     public FlightSearch() {
         setTitle("Flight Search");
@@ -25,6 +20,8 @@ public class FlightSearch extends JFrame {
         String[] cities = {"Cebu", "Manila", "Bohol", "Tacloban", "Baguio", "Siargao", "Cameguin", "Ormoc", "Davao", "Zamboanga", "Surigao"};
         departureCityComboBox = new JComboBox<>(cities);
         destinationComboBox = new JComboBox<>(cities);
+
+        departureDateField = new JTextField();
 
         priceRangeField = new JTextField();
         priceRangeField.setEditable(false);
@@ -45,10 +42,6 @@ public class FlightSearch extends JFrame {
             }
         });
 
-        departureDateSpinner = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(departureDateSpinner, "dd/MM/yyyy");
-        departureDateSpinner.setEditor(dateEditor);
-
         searchButton = new JButton("Search");
         searchButton.addActionListener(new SearchActionListener());
 
@@ -64,7 +57,7 @@ public class FlightSearch extends JFrame {
         add(new JLabel("Destination:"));
         add(destinationComboBox);
         add(new JLabel("Departure Date:"));
-        add(departureDateSpinner);
+        add(departureDateField);
         add(new JLabel("Airlines:"));
         add(airlinesComboBox);
         add(new JLabel("Layovers:"));
@@ -105,7 +98,7 @@ public class FlightSearch extends JFrame {
             String destination = (String) destinationComboBox.getSelectedItem();
             String airlines = (String) airlinesComboBox.getSelectedItem();
             String layoverType = (String) layoverComboBox.getSelectedItem();
-            Date departureDate = (Date) departureDateSpinner.getValue();
+            String departureDate = departureDateField.getText();
             int price = calculatePrice(airlines, layoverType);
 
             try {

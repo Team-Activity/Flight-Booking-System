@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Set;
 
@@ -17,14 +15,10 @@ public class FinalizeBooking extends JDialog {
         setLayout(new BorderLayout());
         setSize(300, 200);
 
-        JLabel confirmationLabel = new JLabel("Finalizing booking...");
-        add(confirmationLabel, BorderLayout.CENTER);
-
         pack();
         setLocationRelativeTo(parent);
-        setVisible(true);
 
-        addBookingToDatabase();
+        addBookingToDatabase(); 
     }
 
     private void addBookingToDatabase() {
@@ -34,8 +28,8 @@ public class FinalizeBooking extends JDialog {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Failed to finalize booking.", "Database Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            dispose(); // Dispose of the dialog after showing the message
         }
-    
-        dispose();
     }
 }

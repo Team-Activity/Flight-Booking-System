@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class PassengerDetailsForm extends JDialog {
     private JTextField firstNameField;
@@ -41,6 +42,23 @@ public class PassengerDetailsForm extends JDialog {
                 if (validateFields()) {
                     dispose();
                     new SeatSelectionForm(parent).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(PassengerDetailsForm.this, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                if (validateFields()) {
+                    String firstName = firstNameField.getText().trim();
+                    String lastName = lastNameField.getText().trim();
+                    String birthday = birthdayField.getText().trim();
+                    String gender = (String) genderComboBox.getSelectedItem();
+                
+                    try {
+                        DBConnection.addPassengerDetails(firstName, lastName, birthday, gender);
+                        // Proceed to the next form or step
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(PassengerDetailsForm.this, "Database error", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     JOptionPane.showMessageDialog(PassengerDetailsForm.this, "Please fill all the fields", "Error", JOptionPane.ERROR_MESSAGE);
                 }
