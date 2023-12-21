@@ -40,7 +40,25 @@ public class ManageBookings extends JFrame {
     }
 
     private void modifyBooking() {
-        JOptionPane.showMessageDialog(this, "Modify Booking functionality to be implemented.");
+        int selectedRow = bookingsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a booking to modify.");
+            return;
+        }
+    
+        // Fetch data from the selected row
+        int booking_id = (int) bookingsTable.getValueAt(selectedRow, 0);
+        String firstname = (String) bookingsTable.getValueAt(selectedRow, 2);
+        String lastname = (String) bookingsTable.getValueAt(selectedRow, 3);
+        String destination = (String) bookingsTable.getValueAt(selectedRow, 7);
+        String departure_date = bookingsTable.getValueAt(selectedRow, 6).toString();
+        
+        // Assuming the 'seat_numbers' column is the last one in your table model
+        String seat_numbers = (String) bookingsTable.getValueAt(selectedRow, bookingsTable.getColumnCount() - 1);
+    
+        // Open ModifyBookingFrame with the fetched data
+        ModifyBookingFrame modifyFrame = new ModifyBookingFrame(booking_id, firstname, lastname, destination, departure_date, seat_numbers);
+        modifyFrame.setVisible(true);
     }
 
     private void cancelBooking() {

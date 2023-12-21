@@ -77,5 +77,24 @@ public static void addPassengerDetails(String firstName, String lastName, String
             e.printStackTrace();
         }
     }
+
+    public static void updateBookingDetails(int bookingId, String firstName, String lastName, String destination, String departureDate, String seatNumbers) throws SQLException {
+        String sql = "UPDATE bookings SET firstname = ?, lastname = ?, destination = ?, departure_date = ?, seat_numbers = ? WHERE booking_id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, firstName);
+            pstmt.setString(2, lastName);
+            pstmt.setString(3, destination);
+            pstmt.setString(4, departureDate);
+            pstmt.setString(5, seatNumbers);
+            pstmt.setInt(6, bookingId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("SQL error occurred while updating booking details: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     
 }
