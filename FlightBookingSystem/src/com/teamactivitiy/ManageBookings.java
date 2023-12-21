@@ -1,13 +1,16 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class ManageBookings extends JFrame {
     private JTable bookingsTable;
-    private JButton modifyButton, cancelButton, checkInButton, eTicketButton;
+    private JButton modifyButton, cancelButton;
 
     public ManageBookings() {
         setTitle("Manage Bookings");
-        setSize(600, 400);
+        setSize(800, 600); // Frame size increased for better readability
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         initializeComponents();
         addEventListeners();
@@ -16,20 +19,16 @@ public class ManageBookings extends JFrame {
 
     private void initializeComponents() {
         bookingsTable = new JTable();
-        populateTableWithDummyData();
+        populateTableWithDatabaseData(); // Fetch data from database
         JScrollPane scrollPane = new JScrollPane(bookingsTable);
         add(scrollPane);
 
         modifyButton = new JButton("Modify Booking");
         cancelButton = new JButton("Cancel Booking");
-        checkInButton = new JButton("Check-In Online");
-        eTicketButton = new JButton("Get E-Ticket");
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(modifyButton);
         buttonPanel.add(cancelButton);
-        buttonPanel.add(checkInButton);
-        buttonPanel.add(eTicketButton);
 
         add(buttonPanel);
     }
@@ -37,8 +36,6 @@ public class ManageBookings extends JFrame {
     private void addEventListeners() {
         modifyButton.addActionListener(e -> modifyBooking());
         cancelButton.addActionListener(e -> cancelBooking());
-        checkInButton.addActionListener(e -> checkIn());
-        eTicketButton.addActionListener(e -> getETicket());
     }
 
     private void modifyBooking() {
@@ -52,22 +49,34 @@ public class ManageBookings extends JFrame {
         }
     }
 
-    private void checkIn() {
-        JOptionPane.showMessageDialog(this, "Check-In functionality to be implemented.");
-    }
+    private void populateTableWithDatabaseData() {
+        String[] columnNames = {"Booking ID", "User ID", "First Name", "Last Name", "Departure City", "Destination", "Departure Date", "Airlines", "Price", "Seats"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
-    private void getETicket() {
-        JOptionPane.showMessageDialog(this, "E-Ticket functionality to be implemented.");
-    }
+        try {
+            Connection conn = DBConnection.getConnection(); // Replace with your method to get a connection
+            Statement stmt = conn.createStatement();
+            String sql = "SELECT booking_id, user_id, firstname, lastname, departure_city, destination, departure_date, airlines, price, seat_numbers FROM bookings";
+            ResultSet rs = stmt.executeQuery(sql);
 
-    private void populateTableWithDummyData() {
-        String[] columnNames = {"Booking ID", "User ID", "Departure City", "Destination", "Departure Date", "Airlines", "Price", "Seats"};
-        Object[][] data = {
-            {1, 101, "City A", "City B", "2023-01-01", "Airline X", 200.00, 2},
-            {2, 102, "City C", "City D", "2023-01-03", "Airline Y", 150.00, 1}
-        };
-
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        bookingsTable.setModel(model);
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("booking_id"),
+                    rs.getInt("user_id"),
+                    rs.getString("firstname"),
+                    rs.getString("lastname"),
+                    rs.getString("departure_city"),
+                    rs.getString("destination"),
+                    rs.getDate("departure_date"),
+                    rs.getString("airlines"),
+                    rs.getDouble("price"),
+                    rs.getInt("seat_numbers")
+                });
+            }
+            bookingsTable.setModel(model);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error in database connection: " + e.getMessage());
+        }
     }
 }
