@@ -20,6 +20,7 @@ public class ManageBookings extends JFrame {
     private void initializeComponents() {
         bookingsTable = new JTable();
         populateTableWithDatabaseData(); // Fetch data from database
+        bookingsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Set selection mode to single
         JScrollPane scrollPane = new JScrollPane(bookingsTable);
         add(scrollPane);
 
@@ -43,9 +44,31 @@ public class ManageBookings extends JFrame {
     }
 
     private void cancelBooking() {
+        int selectedRow = bookingsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a booking to cancel.");
+            return;
+        }
+
         int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to cancel the selected booking?", "Cancel Booking", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Booking cancelled successfully.");
+            try {
+                int bookingId = (int) bookingsTable.getValueAt(selectedRow, 0); // Assuming the Booking ID is in the first column
+                Connection conn = DBConnection.getConnection(); // Replace with your method to get a connection
+                Statement stmt = conn.createStatement();
+                String sql = "DELETE FROM bookings WHERE booking_id = " + bookingId;
+                int rowsAffected = stmt.executeUpdate(sql);
+
+                if (rowsAffected > 0) {
+                    JOptionPane.showMessageDialog(this, "Booking cancelled successfully.");
+                    ((DefaultTableModel) bookingsTable.getModel()).removeRow(selectedRow); // Remove row from table
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error: Unable to cancel booking.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error in database operation: " + e.getMessage());
+            }
         }
     }
 
@@ -67,10 +90,10 @@ public class ManageBookings extends JFrame {
                     rs.getString("lastname"),
                     rs.getString("departure_city"),
                     rs.getString("destination"),
-                    rs.getDate("departure_date"),
+                    rs.getString("departure_date"),
                     rs.getString("airlines"),
                     rs.getDouble("price"),
-                    rs.getInt("seat_numbers")
+                    rs.getString("seat_numbers")
                 });
             }
             bookingsTable.setModel(model);
